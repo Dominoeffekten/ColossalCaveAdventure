@@ -3,3 +3,25 @@
     Main
 
 ------------ */
+
+body{
+    background-color: black;
+}
+
+p, .fa-square-full, a{
+    line-height: 1.5;
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 1em;
+    color: white;
+    margin-left: 34px;
+}
+a{
+    margin:0;
+}
+.fa-square-full{
+    visibility: visible;
+}
+
+.blink{
+    visibility: hidden;
+}
