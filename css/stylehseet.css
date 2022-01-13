@@ -1,19 +1,45 @@
 /* ----------
 
+    generel
+
+------------ */
+body{
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+}
+main{
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+footer{
+    height: 10vh;
+    text-align: center;
+}
+
+/* ----------
+
     Main
 
 ------------ */
-
-body{
-    background-color: black;
+.userInput-div{
+    background-color: #38bb38;
+    padding: 1%;
+    display: flex;
+    align-content: center;
+    align-items: center;
 }
-
-p, .fa-square-full, a{
+h1, p, .fa-square-full, a{
     line-height: 1.5;
     font-family: "Lucida Console", Monaco, monospace;
     font-size: 1em;
     color: white;
     margin-left: 34px;
+}
+.fas{
+    margin:0
 }
 a{
     margin:0;
