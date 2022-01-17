@@ -1,0 +1,106 @@
+{
+    "intro":{
+        "name": "Pallet Town",
+        "battle" : "none",
+        "pokemon": {
+            "name": "Venonat",
+            "type":"Bug"
+        },
+        "info": "Starting and home town. Calm and tranquil.",
+        "task": "catch pokemon"
+    },
+
+    "city1":{
+        "name": "Pewter City",
+        "battle": {
+            "gymLeader": "Brock",
+            "type": "Rock",
+            "pokemon": "Geodude",
+            "weakness": "Fighting"
+        },
+        "pokemon": "none",
+        "info": "Home to the Museum of Science.",
+        "task": "battle pokemon"
+    },
+    "city2":{
+        "name": "Viridian City",
+        "battle" : "none",
+        "pokemon": "none",
+        "info": "City before Viridian Forest and city leading to Indigo Plateau.",
+        "task": "get 10 berries"
+    },
+    "city3":{
+        "name": "Cerulean City",
+        "battle":{
+            "gymLeader": "Misty",
+            "type": "Water",
+            "pokemon": "Tentacool",
+            "weakness": "Dragon"
+        },
+        "pokemon": {
+            "name": "Dragonite",
+            "type":"Dragon"
+        },
+        "info": "Water city and home of the bike shop.",
+        "task": ["battle pokemon", "catch pokemon"]
+        
+    },
+    "city4":{
+        "name": "Vermillion City",
+        "battle": "none",
+        "pokemon": "none",
+        "info": "Serves as a port for the S.S. Anne.",
+        "task": "none"
+    },
+    "city5":{
+        "name": "Lavender Town",
+        "battle": "none",
+        "pokemon": "none",
+        "info": "Known for ghost sightings, home of the Pokemon Tower and a gravesite for Pokemon.",
+        "task": "get pokeballs"
+    },
+    "city6":{
+        "name": "Celadon City",
+        "battle":{
+            "gymLeader": "Erika",
+            "type": "Grass",
+            "pokemon": "Bellsprout",
+            "weakness": "Fire"
+        },
+        "pokemon": {
+            "name": "Vulpix",
+            "type": "Fire"
+        },
+        "info": "Most populated city in Kanto. Home to a department store and casino.",
+        "task": ["battle pokemon", "catch pokemon"]
+    },
+    "city7":{
+        "name": "Saffron City",
+        "battle":{
+            "gymLeader": "Sabrina",
+            "type": "Psychic",
+            "pokemon": "Abra",
+            "weakness": "Psychic"
+        },
+        "pokemon": "none",
+        "info": "Second biggest city in terms of population. Along with Cerulean, the only city that has four routes into it.",
+        "task": "battle pokemon"
+    },
+    "city8":{
+        "name": "Fuchsia City",
+        "battle": "none",
+        "pokemon":{
+            "name": "Jynx",
+            "type":"Psychic"
+        },
+        "info": "Home to the Safari Zone which has since been replaced with the Go Park.",
+        "task": "catch pokemon"
+    },
+    "final":{
+        "name": "Indigo Plateau",
+        "battle": "none",
+        "pokemon": "none",
+        "info": "Capital of the Pokemon League.", 
+        "task": "have all pokemons"
+    }
+}
