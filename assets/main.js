@@ -1,32 +1,130 @@
 'use strict';
 
-/*
-//pokemon api
- https://pokeapi.co/docs/v2#locations-section
-
- //info pm byerne
-https://www.dexerto.com/pokemon/pokemon-lets-go-map-kanto-region-221646/
-
-*/
-
-
 // save keystrokes for queryseletor
 const select = function (foo) { 
     return document.querySelector(foo);
+}
+const $ = function (foo) { 
+    return document.getElementById(foo);
 }
 
 //variables
 let userLetter = []; //make a variable with the user letters
 let storage = [{"name": "Pikachu", "type":"Electric"}]; //how make pokemons do the user have?
 
+
 //get elements
 let cursor = select(".fa-square-full"); //get square
 let userText = select(".userText"); //get the p for the user text
 let placeText = select(".placeTextHere"); //get the place for the user text
 
+let yes = 0;
+let building = 0;
+let pokemon = 0;
+let left = 0;
+let right = 0;
+let berryNumber;
+let takeBerry = 0;
+/*--------------------------------
 
+        Do function
 
+--------------------------------*/
+function whatToDo(){
+    console.log(userLetter.join(''))
+    switch(userLetter.join('')){ 
+        case "yes": //want instructions
+            if (yes == 0){
+                instructions();
+                intro();
+                yes++;
+            } else{
+                dontUnderstand();
+            }
+            break; 
+        case "no": //just want to play
+            if (yes == 0){
+                intro();
+                yes++;
+            } else{
+                dontUnderstand();
+            }
+            break;
+        case "help": //want help
+            help();
+            break; 
+        case "building": //want help
+            if (building == 0){
+                roads();
+                building++;
+            } else{
+                dontUnderstand();
+            }
+            break; 
+        case "left": //want to go to the left
+            if (left == 0){
+                leftRoadIntro();
+                left++;
+            } else{
+                dontUnderstand();
+            }
+            break; 
+        case "right": //wants to go to the right
+            if (right == 0){
+                rightRoadIntro();
+                right++
+            } else{
+                dontUnderstand();
+            }
+            break; 
+        case "catch pokemon": //wants to go to the right
+            if (pokemon == 0){
+                catchPokemon("Venonat");
+                pokemon++
+            } else{
+                dontUnderstand();
+            }
+            break;
+        case "take berries": //wants to go to the right
+            
+            if (takeBerry == 0){
+                takeBerry++
+                console.log("take berries 2")
+            } else{
+                dontUnderstand();
+            }
+            break;
+        case "take" + berryNumber + "berries": //wants to go to the right
+            takeBerry++
+            console.log("take berries number")
+            if (takeBerry == 1){
+                console.log("take" + berryNumber + "berries")
+            } else{
+                dontUnderstand();
+            }
+            break;
+        case "storage": //wants to see pokemons
+            for(let i = 0; i <= storage.length-1; i++){
+                let paragraph = document.createElement("p");
+                paragraph.innerHTML += storage[0].name //take the array and push it on the site
+                placeText.append(paragraph);
+            };
+            break; 
+        default:
+            dontUnderstand();
+            break;
+    };
+};
 
+/*--------------------------------
+
+        Generel functions
+
+--------------------------------*/
+//get the cursor to blink
+setInterval(function() {
+    cursor.classList.toggle("blink");
+}, 600);
 
 //instructions
 function instructions(){
@@ -36,7 +134,77 @@ function instructions(){
     I should warn you that I look at only the first 5 letters of each word (should you get stuck type "help" for some generel hints)`;
     placeText.appendChild(paragraph);
 };
+//something is wrong
+function dontUnderstand(){
+    let paragraph = document.createElement("p"); //make a paragraph
+    paragraph.innerHTML = `Sorry I don't understand. If you are stuck type "help" for some generel hints`;
+    placeText.appendChild(paragraph);
+};
+//the user wants help
+function help(){
+    let paragraph = document.createElement("p"); //make a paragraph
+    paragraph.innerHTML = `I know of places, actions and things. Most of my vocabulary describes places and is used to you there. To move, try words like forest, building, enter, right, left, back. 
+    I know about a few special creatures, like pokemons. you can catch them. Usally you will need to give both the object and action words, but sometimes I can infer the object from the verb alone.
+    Some obejcts have also imply verbs; in particular "storage" implies "see storage" which causes me to give you a list of the pokemons you have catched`;
+    placeText.appendChild(paragraph);
+};
 
+/* 
+    leader
+*/
+//talk to a leader
+function talkToPerson(gymLeader, type){
+    let paragraph = document.createElement("p"); //make a paragraph
+    paragraph.innerHTML = `The person introduce her self as ${gymLeader}. She has a ${type} type pokemon.
+    It is ${json.battle.pokemon}. What will you do?`;
+    placeText.appendChild(paragraph);
+};
+//battle a leader
+function battle(pokemon, weakness){
+    let paragraph = document.createElement("p"); //make a paragraph
+    paragraph.innerHTML = `You choose to battle ${pokemon}. The pokemon is weak to ${weakness}. 
+    Which pokemon will you choose to battle with?`;
+    placeText.appendChild(paragraph);
+};
+/* 
+    pokemons 
+*/ 
+//see a pokemon
+function seePokemon(){
+    let paragraph = document.createElement("p"); //make a paragraph
+    paragraph.innerHTML = `It is a pokemon!`;
+    placeText.appendChild(paragraph);
+};
+    //catch a pokemon
+    function catchPokemon(pokemon){
+        let paragraph = document.createElement("p"); //make a paragraph
+        paragraph.innerHTML = `You got ${pokemon}.`;
+        placeText.appendChild(paragraph);
+    };
+/* 
+    berries
+*/ 
+//see food
+function seeFood(){
+    let paragraph = document.createElement("p"); //make a paragraph
+    paragraph.innerHTML = `You are in a forrest. There is a lot if berries, that your pokemon love`;
+    placeText.appendChild(paragraph);
+};
+//take food
+function takeFood(berryNumber){
+    let paragraph = document.createElement("p"); //make a paragraph
+    paragraph.innerHTML = `You took ${berryNumber} berries`;
+    placeText.appendChild(paragraph);
+    
+    
+};
+
+/*--------------------------------
+
+        city functions
+
+--------------------------------*/
+/*  First city  */
 function intro(){
     let json = { //info about the city
         "name": "Pallet Town",
@@ -52,7 +220,7 @@ function intro(){
     let paragraph = document.createElement("p");
     paragraph.innerHTML = `You are at ${json.name} on a road. In front of you is there a small brick building. Around you is a forrest. `;
     placeText.appendChild(paragraph);
-
+};
     //when the user go to the building
     function roads(){
         let paragraph = document.createElement("p");
@@ -61,44 +229,25 @@ function intro(){
         placeText.appendChild(paragraph);
     };
     //on the left road is there a pokemon the user need to capture
-    function leftRoad(){
+    function leftRoadIntro(){
         let paragraph = document.createElement("p");
         paragraph.innerHTML = `You walked to the left. It is a long and dark road. You walk for 20 mins when you hear somehting in the bushes.
         You stop and look over there. You can hear it moving. It is everywhere. It stops. You go back to the building.
-        Suddenly something is in front of you. It is a pokemon`;
+        Suddenly something is in front of you.`;
         placeText.appendChild(paragraph);
-        if(userLetter.join(" ") == "catch pokemon"){
-            storage.push(json.pokemon)
-        } else{
-            dontUnderstand();
-        }
+        seePokemon();
     };
     //The road to the next city
-    function rightRoad(){
+    function rightRoadIntro(){
         let paragraph = document.createElement("p");
         paragraph.innerHTML = `You walked to the right. The road is nice you walk for 30 mins and see a new road`;
         placeText.appendChild(paragraph);
         city1();
     };
-};
 
-function talkToPerson(){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `The person introduce her self as ${json.battle.gymLeader}. She has a ${json.battle.type} type pokemon.
-    It is ${json.battle.pokemon}. What will you do?`;
-    placeText.appendChild(paragraph);
-};
-
-function battle(){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `You choose to battle ${json.battle.pokemon}. The pokemon is weak to ${json.battle.weakness}. 
-    Which pokemon will you choose to battle with?`;
-    placeText.appendChild(paragraph);
-    if(json.battle.weakness == storage[1]){
-        
-    }
-}
-
+/*  
+    Second city  
+*/
 function city1(){
     let json = {
         "name": "Pewter City",
@@ -113,7 +262,7 @@ function city1(){
         "task": "battle pokemon"
     };
     let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `There is a sign with the name ${json.name}. You can go to the left or right`;
+    paragraph.innerHTML = `There is a sign with the name ${json.name}. The road is splitting up. You can go to the left or right`;
     placeText.appendChild(paragraph);
     
     //the road back to the last city
@@ -123,7 +272,7 @@ function city1(){
     //meet the trainer and battle them
     function leftRoad(){
         let paragraph = document.createElement("p"); //make a paragraph
-        paragraph.innerHTML = `You go the the right and raound a corner, where you see a person.`;
+        paragraph.innerHTML = `You go the the right and around a corner, where you see a person.`;
         placeText.appendChild(paragraph);
     };
     //to go around the trainer
@@ -133,6 +282,7 @@ function city1(){
         placeText.appendChild(paragraph);
     }
 };
+//city 2 
 function city2(){
     let json = {
         "name": "Pewter City",
@@ -155,64 +305,33 @@ function city2(){
 
 
 
+/*--------------------------------
 
+        Eventlisteners
 
-
-//something is wrong
-function dontUnderstand(){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `Sorry I don't understand. If you are stuck type "help" for some generel hints`;
-    placeText.appendChild(paragraph);
-};
-function help(){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `I know of places, actions and things. Most of my vocabulary describes places and is used to you there. To move, try words like forest, building, enter, right, left, back. 
-    I know about a few special creatures, like pokemons. you can catch them. Usally you will need to give both the object and action words, but sometimes I can infer the object from the verb alone.
-    Some obejcts have also imply verbs; in particular "storage" implies "see storage" which causes me to give you a list of the pokemons you have catched`;
-    placeText.appendChild(paragraph);
-}
-
-
-
-
-
+--------------------------------*/
 
 //what does the user push on?
 window.addEventListener("keyup", function(e){
-    
-    var charCode = e.keyCode;
-    console.log(charCode);
-    if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 32) {
-        //if you press any letters
-        userLetter.push(e.key);
-        //push inside the array
-        userText.innerHTML = userLetter.join('');
-        //make it visieble on the site
-    } else if(charCode == 8){
-        //if you press backspace
-        userLetter.splice(userLetter.length-1, 1);
-        //delete the numbers og arrays - 2 from behind
-        userText.innerHTML = userLetter.join('');
-        //make it visble on the site
-    }else if(charCode == 13){
-        //if you press enter
-        let paragraph = document.createElement("p"); //make a paragraph
-        paragraph.innerHTML += userLetter.join('');
+    var charCode = e.keyCode; //code of numbers
+    console.log(charCode)
+    if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 32) {//if you press any letters
+        userLetter.push(e.key); //push inside the array
+        userText.innerHTML = userLetter.join('');//make it visieble on the site
+    } else if(charCode == 8){ //if you press backspace
+        userLetter.splice(userLetter.length-1, 1);  //delete the numbers og arrays - 2 from behind
+        return userText.innerHTML = userLetter.join(''); //make it visble on the site
+    } else if(charCode == 13){  //if you press enter
+        let paragraph = document.createElement("p");
+        paragraph.innerHTML += userLetter.join(''); //take the array and push it on the site
         placeText.append(paragraph);
-        //take the array and push it on the site
-        userLetter = [];
-        //delete the array
-        userText.innerHTML = userLetter;
-        //push in the green box
+        whatToDo();
+        userLetter = []; //delete the array
+        userText.innerHTML = ""; //upload the letters from the user on the site
     }else{
         return false;
     };
 });
-
-//get the cursor to blink
-setInterval(function() {
-    cursor.classList.toggle("blink");
-}, 600);
 
 
 
