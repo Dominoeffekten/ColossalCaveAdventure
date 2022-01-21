@@ -35,11 +35,11 @@ function whatToDo(){
     switch(userLetter.join('')){ 
         case "yes": //want instructions
             if (yes == 0){
-                instructions();
+                description(instructionData.instruction);
                 intro();
                 yes++;
             } else{
-                dontUnderstand();
+                description(instructionData.dontUnderstand);
             }
             break; 
         case "no": //just want to play
@@ -47,18 +47,18 @@ function whatToDo(){
                 intro();
                 yes++;
             } else{
-                dontUnderstand();
+                description(instructionData.dontUnderstand);
             }
             break;
         case "help": //want help
-            help();
+            description(instructionData.help);
             break; 
         case "building": //want help
             if (building == 0){
                 roads();
                 building++;
             } else{
-                dontUnderstand();
+                description(instructionData.dontUnderstand);
             }
             break; 
         case "left": //want to go to the left
@@ -66,7 +66,7 @@ function whatToDo(){
                 leftRoadIntro();
                 left++;
             } else{
-                dontUnderstand();
+                description(instructionData.dontUnderstand);
             }
             break; 
         case "right": //wants to go to the right
@@ -74,7 +74,7 @@ function whatToDo(){
                 rightRoadIntro();
                 right++
             } else{
-                dontUnderstand();
+                description(instructionData.dontUnderstand);
             }
             break; 
         case "catch pokemon": //wants to go to the right
@@ -82,7 +82,7 @@ function whatToDo(){
                 catchPokemon("Venonat");
                 pokemon++
             } else{
-                dontUnderstand();
+                description(instructionData.dontUnderstand);
             }
             break;
         case "take berries": //wants to go to the right
@@ -91,7 +91,7 @@ function whatToDo(){
                 takeBerry++
                 console.log("take berries 2")
             } else{
-                dontUnderstand();
+                description(instructionData.dontUnderstand);
             }
             break;
         case "take" + berryNumber + "berries": //wants to go to the right
@@ -100,7 +100,7 @@ function whatToDo(){
             if (takeBerry == 1){
                 console.log("take" + berryNumber + "berries")
             } else{
-                dontUnderstand();
+                description(instructionData.dontUnderstand);
             }
             break;
         case "storage": //wants to see pokemons
@@ -111,7 +111,7 @@ function whatToDo(){
             };
             break; 
         default:
-            dontUnderstand();
+            description(instructionData.dontUnderstand);
             break;
     };
 };
@@ -126,28 +126,12 @@ setInterval(function() {
     cursor.classList.toggle("blink");
 }, 600);
 
-//instructions
-function instructions(){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `Somewhere nearby is the Pokemon Leauge where others have fought and won legendary pokemons. 
-    Magic is said to dominate the way there. I will be your eyes and hands. Direct me with commands of 1 or 2 words. 
-    I should warn you that I look at only the first 5 letters of each word (should you get stuck type "help" for some generel hints)`;
-    placeText.appendChild(paragraph);
-};
-//something is wrong
-function dontUnderstand(){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `Sorry I don't understand. If you are stuck type "help" for some generel hints`;
-    placeText.appendChild(paragraph);
-};
-//the user wants help
-function help(){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `I know of places, actions and things. Most of my vocabulary describes places and is used to you there. To move, try words like forest, building, enter, right, left, back. 
-    I know about a few special creatures, like pokemons. you can catch them. Usally you will need to give both the object and action words, but sometimes I can infer the object from the verb alone.
-    Some obejcts have also imply verbs; in particular "storage" implies "see storage" which causes me to give you a list of the pokemons you have catched`;
-    placeText.appendChild(paragraph);
-};
+const description = (text) => {
+    let paragraph = document.createElement("p");
+    paragraph.innerHTML = text;
+    placeText.appendChild(paragraph)
+}
+
 
 /* 
     leader
@@ -201,24 +185,58 @@ function takeFood(berryNumber){
 
 /*--------------------------------
 
+        DATA
+
+--------------------------------*/
+const instructionData = {
+    instruction: 
+        `Somewhere nearby is the Pokemon Leauge where others have fought and won legendary pokemons. 
+        Magic is said to dominate the way there. I will be your eyes and hands. Direct me with commands of 1 or 2 words. 
+        I should warn you that I look at only the first 5 letters of each word (should you get stuck type "help" for some generel hints)`,
+    help: 
+        `I know of places, actions and things. Most of my vocabulary describes places and is used to you there. To move, try words like forest, building, enter, right, left, back. 
+        I know about a few special creatures, like pokemons. you can catch them. Usally you will need to give both the object and action words, but sometimes I can infer the object from the verb alone.
+        Some obejcts have also imply verbs; in particular "storage" implies "see storage" which causes me to give you a list of the pokemons you have catched`,
+    dontUnderstand: 
+        `Sorry I don't understand. If you are stuck type "help" for some generel hints`
+}
+
+const introData = {
+    name: "Pallet Town",
+    battle : {},
+    pokemon: {
+        name: "Venonat",
+        type:"Bug"
+    },
+    info: "Starting and home town. Calm and tranquil.",
+    task: "catch pokemon",
+    options: ["building", "right", "left"]
+}
+
+const city1Data = {
+    name: "Pewter City",
+    battle: {
+        gymLeader: "Brock",
+        type: "Rock",
+        pokemon: "Geodude",
+        weakness: "Fighting"
+    },
+    pokemon: {},
+    info: "Home to the Museum of Science.",
+    task: "battle pokemon",
+    options: []
+}
+
+/*--------------------------------
+
         city functions
 
 --------------------------------*/
 /*  First city  */
 function intro(){
-    let json = { //info about the city
-        "name": "Pallet Town",
-        "battle" : "none",
-        "pokemon":{
-            "name": "Venonat",
-            "type":"Bug"
-        },
-        "info": "Starting and home town. Calm and tranquil.",
-        "task": "catch pokemon"
-    };
     //what do the user see?
     let paragraph = document.createElement("p");
-    paragraph.innerHTML = `You are at ${json.name} on a road. In front of you is there a small brick building. Around you is a forrest. `;
+    paragraph.innerHTML = `You are at ${introData.name} on a road. In front of you is there a small brick building. Around you is a forrest. `;
     placeText.appendChild(paragraph);
 };
     //when the user go to the building
@@ -249,20 +267,8 @@ function intro(){
     Second city  
 */
 function city1(){
-    let json = {
-        "name": "Pewter City",
-        "battle": {
-            "gymLeader": "Brock",
-            "type": "Rock",
-            "pokemon": "Geodude",
-            "weakness": "Fighting"
-        },
-        "pokemon": "none",
-        "info": "Home to the Museum of Science.",
-        "task": "battle pokemon"
-    };
     let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `There is a sign with the name ${json.name}. The road is splitting up. You can go to the left or right`;
+    paragraph.innerHTML = `There is a sign with the name ${city1Data.name}. The road is splitting up. You can go to the left or right`;
     placeText.appendChild(paragraph);
     
     //the road back to the last city
