@@ -65,6 +65,9 @@ function whatToDo(){
             if (left == 0){
                 leftRoadIntro();
                 left++;
+            } else if (left == 1){
+                console.log("number 2")
+                left++;
             } else{
                 description(instructionData.dontUnderstand);
             }
@@ -199,7 +202,7 @@ const instructionData = {
         Some obejcts have also imply verbs; in particular "storage" implies "see storage" which causes me to give you a list of the pokemons you have catched`,
     dontUnderstand: 
         `Sorry I don't understand. If you are stuck type "help" for some generel hints`
-}
+};
 
 const introData = {
     name: "Pallet Town",
@@ -211,7 +214,7 @@ const introData = {
     info: "Starting and home town. Calm and tranquil.",
     task: "catch pokemon",
     options: ["building", "right", "left"]
-}
+};
 
 const city1Data = {
     name: "Pewter City",
@@ -225,7 +228,7 @@ const city1Data = {
     info: "Home to the Museum of Science.",
     task: "battle pokemon",
     options: []
-}
+};
 
 /*--------------------------------
 
@@ -286,7 +289,7 @@ function city1(){
         let paragraph = document.createElement("p"); //make a paragraph
         paragraph.innerHTML = ``;
         placeText.appendChild(paragraph);
-    }
+    };
 };
 //city 2 
 function city2(){
@@ -320,8 +323,9 @@ function city2(){
 //what does the user push on?
 window.addEventListener("keyup", function(e){
     var charCode = e.keyCode; //code of numbers
-    console.log(charCode)
-    if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 32) {//if you press any letters
+    console.log(e.key)
+    let req = '/\w/';
+   if ((charCode > 47 && charCode < 58)||(charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 32) {//if you press any letters
         userLetter.push(e.key); //push inside the array
         userText.innerHTML = userLetter.join('');//make it visieble on the site
     } else if(charCode == 8){ //if you press backspace
