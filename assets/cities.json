@@ -7,7 +7,7 @@
             "type":"Bug"
         },
         "info": "Starting and home town. Calm and tranquil.",
-        "task": "catch pokemon"
+        "option": ["building", "left", "right", "catch pokemon", "back"]
     },
 
     "city1":{
@@ -20,14 +20,14 @@
         },
         "pokemon": "none",
         "info": "Home to the Museum of Science.",
-        "task": "battle pokemon"
+        "option": ["left", "right", "battle leader", "back"]
     },
     "city2":{
         "name": "Viridian City",
         "battle" : "none",
         "pokemon": "none",
         "info": "City before Viridian Forest and city leading to Indigo Plateau.",
-        "task": "get 10 berries"
+        "option": ["get berries", "back"]
     },
     "city3":{
         "name": "Cerulean City",
@@ -42,7 +42,7 @@
             "type":"Dragon"
         },
         "info": "Water city and home of the bike shop.",
-        "task": ["battle pokemon", "catch pokemon"]
+        "option": ["battle leader", "catch pokemon", "left", "right", "back"]
         
     },
     "city4":{
@@ -50,14 +50,14 @@
         "battle": "none",
         "pokemon": "none",
         "info": "Serves as a port for the S.S. Anne.",
-        "task": "none"
+        "option": ["left", "right", "back"]
     },
     "city5":{
         "name": "Lavender Town",
         "battle": "none",
         "pokemon": "none",
         "info": "Known for ghost sightings, home of the Pokemon Tower and a gravesite for Pokemon.",
-        "task": "get pokeballs"
+        "option": ["get pokeballs", "back"]
     },
     "city6":{
         "name": "Celadon City",
@@ -72,7 +72,7 @@
             "type": "Fire"
         },
         "info": "Most populated city in Kanto. Home to a department store and casino.",
-        "task": ["battle pokemon", "catch pokemon"]
+        "option": ["battle leader", "catch pokemon", "back", "left", "right"]
     },
     "city7":{
         "name": "Saffron City",
@@ -84,7 +84,7 @@
         },
         "pokemon": "none",
         "info": "Second biggest city in terms of population. Along with Cerulean, the only city that has four routes into it.",
-        "task": "battle pokemon"
+        "task": ["battle leader", "left", "right", "back"]
     },
     "city8":{
         "name": "Fuchsia City",
@@ -94,13 +94,13 @@
             "type":"Psychic"
         },
         "info": "Home to the Safari Zone which has since been replaced with the Go Park.",
-        "task": "catch pokemon"
+        "task": ["catch pokemon", "left", "right", "back"]
     },
     "final":{
         "name": "Indigo Plateau",
         "battle": "none",
         "pokemon": "none",
         "info": "Capital of the Pokemon League.", 
-        "task": "have all pokemons"
+        "option": ["have all pokemons"]
     }
 }

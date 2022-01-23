@@ -65,6 +65,9 @@ function whatToDo(){
             if (left == 0){
                 leftRoadIntro();
                 left++;
+            } else if (left == 1){
+                console.log("number 2")
+                left++;
             } else{
                 dontUnderstand();
             }
@@ -214,7 +217,8 @@ function intro(){
             "type":"Bug"
         },
         "info": "Starting and home town. Calm and tranquil.",
-        "task": "catch pokemon"
+        "task": "catch pokemon",
+        "option": ["building", "left", "right"]
     };
     //what do the user see?
     let paragraph = document.createElement("p");
@@ -314,8 +318,9 @@ function city2(){
 //what does the user push on?
 window.addEventListener("keyup", function(e){
     var charCode = e.keyCode; //code of numbers
-    console.log(charCode)
-    if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 32) {//if you press any letters
+    console.log(e.key)
+    let req = '/\w/';
+   if ((charCode > 47 && charCode < 58)||(charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 32) {//if you press any letters
         userLetter.push(e.key); //push inside the array
         userText.innerHTML = userLetter.join('');//make it visieble on the site
     } else if(charCode == 8){ //if you press backspace
