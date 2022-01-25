@@ -25,98 +25,118 @@ let left = 0;
 let right = 0;
 let berryNumber;
 let takeBerry = 0;
+
+let route = [];
 /*--------------------------------
 
         Do function
 
 --------------------------------*/
 function whatToDo(){
-    console.log(userLetter.join(''))
-    switch(userLetter.join('')){ 
-        case "yes": //want instructions
-            if (yes == 0){
-                description(instructionData.instruction);
+    if (userLetter.join('').toLowerCase() === "back") {
+        let lastVisit = route.length - 1;
+        switch (route[lastVisit]) {
+            case "building":
                 intro();
-                yes++;
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break; 
-        case "no": //just want to play
-            if (yes == 0){
-                intro();
-                yes++;
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break;
-        case "help": //want help
-            description(instructionData.help);
-            break; 
-        case "building": //want help
-            if (building == 0){
+                break;
+            case "leftRoad":
                 roads();
-                building++;
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break; 
-        case "left": //want to go to the left
-            if (left == 0){
-                leftRoadIntro();
-                left++;
-            } else if (left == 1){
-                console.log("number 2")
-                left++;
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break; 
-        case "right": //wants to go to the right
-            if (right == 0){
-                rightRoadIntro();
-                right++
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break; 
-        case "catch pokemon": //wants to go to the right
-            if (pokemon == 0){
-                catchPokemon("Venonat");
-                pokemon++
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break;
-        case "take berries": //wants to go to the right
-            
-            if (takeBerry == 0){
+                break;
+            case "rightRoad":
+                roads();
+                break;
+            default:
+                break;
+        }
+        route.splice(-1); // remove last index of array
+    } else {
+        console.log(userLetter.join(''))
+        switch(userLetter.join('')){ 
+            case "yes": //want instructions
+                if (yes == 0){
+                    description(instructionData.instruction);
+                    intro();
+                    yes++;
+                } else{
+                    description(instructionData.dontUnderstand);
+                }
+                break; 
+            case "no": //just want to play
+                if (yes == 0){
+                    intro();
+                    yes++;
+                } else{
+                    description(instructionData.dontUnderstand);
+                }
+                break;
+            case "help": //want help
+                description(instructionData.help);
+                break; 
+            case "building": //want help
+                if (building == 0){
+                    roads();
+                    building++;
+                } else{
+                    description(instructionData.dontUnderstand);
+                }
+                break; 
+            case "left": //want to go to the left
+                if (left == 0){
+                    leftRoadIntro();
+                    left++;
+                } else if (left == 1){
+                    console.log("number 2")
+                    left++;
+                } else{
+                    description(instructionData.dontUnderstand);
+                }
+                break; 
+            case "right": //wants to go to the right
+                if (right == 0){
+                    rightRoadIntro();
+                    right++
+                } else{
+                    description(instructionData.dontUnderstand);
+                }
+                break; 
+            case "catch pokemon": //wants to go to the right
+                if (pokemon == 0){
+                    catchPokemon("Venonat");
+                    pokemon++
+                } else{
+                    description(instructionData.dontUnderstand);
+                }
+                break;
+            case "take berries": //wants to go to the right
+                
+                if (takeBerry == 0){
+                    takeBerry++
+                    console.log("take berries 2")
+                } else{
+                    description(instructionData.dontUnderstand);
+                }
+                break;
+            case "take" + berryNumber + "berries": //wants to go to the right
                 takeBerry++
-                console.log("take berries 2")
-            } else{
+                console.log("take berries number")
+                if (takeBerry == 1){
+                    console.log("take" + berryNumber + "berries")
+                } else{
+                    description(instructionData.dontUnderstand);
+                }
+                break;
+            case "storage": //wants to see pokemons
+                for(let i = 0; i <= storage.length-1; i++){
+                    let paragraph = document.createElement("p");
+                    paragraph.innerHTML += storage[0].name //take the array and push it on the site
+                    placeText.append(paragraph);
+                };
+                break; 
+            default:
                 description(instructionData.dontUnderstand);
-            }
-            break;
-        case "take" + berryNumber + "berries": //wants to go to the right
-            takeBerry++
-            console.log("take berries number")
-            if (takeBerry == 1){
-                console.log("take" + berryNumber + "berries")
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break;
-        case "storage": //wants to see pokemons
-            for(let i = 0; i <= storage.length-1; i++){
-                let paragraph = document.createElement("p");
-                paragraph.innerHTML += storage[0].name //take the array and push it on the site
-                placeText.append(paragraph);
-            };
-            break; 
-        default:
-            description(instructionData.dontUnderstand);
-            break;
-    };
+                break;
+        };
+    }
 };
 
 /*--------------------------------
@@ -213,7 +233,40 @@ const introData = {
     },
     info: "Starting and home town. Calm and tranquil.",
     task: "catch pokemon",
-    options: ["building", "right", "left"]
+    description: function(){
+        return `You are at ${this.name} on a road. In front of you is there a small brick building. Around you is a forrest.`;
+    },
+    options: ["building"]
+};
+
+const roadsData = {
+    name: "Crossroad",
+    pokemon: {},
+    description: function(){
+        return `You stand in front of the building. there is a road to the left and to the right. The road to the right is dark and something is moving. 
+        The road to the left is lighted up by lampposts`;
+    },
+    options: ["left", "right"]
+};
+
+const leftRoadData = {
+    name: "Left Road",
+    pokemon: {},
+    description: function(){
+        return `You walked to the left. It is a long and dark road. You walk for 20 mins when you hear somehting in the bushes.
+        You stop and look over there. You can hear it moving. It is everywhere. It stops. You go back to the building.
+        Suddenly something is in front of you.`;
+    },
+    options: ["catch"]
+};
+
+const rightRoadData = {
+    name: "Right Road",
+    pokemon: {},
+    description: function(){
+        return `You walked to the right. The road is nice you walk for 30 mins and see a new road`;
+    },
+    options: []
 };
 
 const city1Data = {
@@ -227,6 +280,9 @@ const city1Data = {
     pokemon: {},
     info: "Home to the Museum of Science.",
     task: "battle pokemon",
+    description: function(){
+        return `There is a sign with the name ${this.name}. The road is splitting up. You can go to the left or right`;
+    },
     options: []
 };
 
@@ -238,46 +294,35 @@ const city1Data = {
 /*  First city  */
 function intro(){
     //what do the user see?
-    let paragraph = document.createElement("p");
-    paragraph.innerHTML = `You are at ${introData.name} on a road. In front of you is there a small brick building. Around you is a forrest. `;
-    placeText.appendChild(paragraph);
+    description(introData.description());
 };
-    //when the user go to the building
-    function roads(){
-        let paragraph = document.createElement("p");
-        paragraph.innerHTML = `You stand in front of the building. there is a road to the left and to the right. The road to the right is dark and something is moving. 
-        The road to the left is lighted up by lampposts`;
-        placeText.appendChild(paragraph);
-    };
-    //on the left road is there a pokemon the user need to capture
-    function leftRoadIntro(){
-        let paragraph = document.createElement("p");
-        paragraph.innerHTML = `You walked to the left. It is a long and dark road. You walk for 20 mins when you hear somehting in the bushes.
-        You stop and look over there. You can hear it moving. It is everywhere. It stops. You go back to the building.
-        Suddenly something is in front of you.`;
-        placeText.appendChild(paragraph);
-        seePokemon();
-    };
-    //The road to the next city
-    function rightRoadIntro(){
-        let paragraph = document.createElement("p");
-        paragraph.innerHTML = `You walked to the right. The road is nice you walk for 30 mins and see a new road`;
-        placeText.appendChild(paragraph);
-        city1();
-    };
+
+//when the user go to the building
+function roads(){
+    route.push("building");
+    description(roadsData.description());
+};
+
+//on the left road is there a pokemon the user need to capture
+function leftRoadIntro(){
+    route.push("leftRoad");
+    description(leftRoadData.description());
+    seePokemon();
+};
+
+//The road to the next city
+function rightRoadIntro(){
+    route.push("rightRoad");
+    description(rightRoadData.description());
+    city1();
+};
 
 /*  
     Second city  
 */
 function city1(){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `There is a sign with the name ${city1Data.name}. The road is splitting up. You can go to the left or right`;
-    placeText.appendChild(paragraph);
+    description(city1Data.description());
     
-    //the road back to the last city
-    function backRoad(){
-        intro();
-    };
     //meet the trainer and battle them
     function leftRoad(){
         let paragraph = document.createElement("p"); //make a paragraph
