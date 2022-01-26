@@ -9,332 +9,432 @@ const $ = function (foo) {
 }
 
 //variables
-let userLetter = []; //make a variable with the user letters
-let storage = [{"name": "Pikachu", "type":"Electric"}]; //how make pokemons do the user have?
-
+let userLetter = []; //A variable with the user letters
+let storage = ["Pikachue"]; //number of pokemons
 
 //get elements
 let cursor = select(".fa-square-full"); //get square
 let userText = select(".userText"); //get the p for the user text
 let placeText = select(".placeTextHere"); //get the place for the user text
 
-let yes = 0;
-let building = 0;
-let pokemon = 0;
-let left = 0;
-let right = 0;
-let berryNumber;
+let instructions = true; //do they want instructions?
+let building = true; //intro --> building
+let left = 0; //go to left
+let right = 0; //go to right
+let pokemonNumber = 0; //number og pokemons
+let berryNumber; //number og berries
 let takeBerry = 0;
+
+let option = 0; //the options the user has taken
+let route = []; //which rout the user are one
+
 /*--------------------------------
-
         Do function
-
 --------------------------------*/
+
 function whatToDo(){
-    console.log(userLetter.join(''))
-    switch(userLetter.join('')){ 
-        case "yes": //want instructions
-            if (yes == 0){
-                description(instructionData.instruction);
-                intro();
-                yes++;
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break; 
-        case "no": //just want to play
-            if (yes == 0){
-                intro();
-                yes++;
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break;
-        case "help": //want help
-            description(instructionData.help);
-            break; 
-        case "building": //want help
-            if (building == 0){
+    console.log(option);
+    let userAnswear = userLetter.join(''); //user answear
+    if (userAnswear.toLowerCase() === "back") { //if the answear is back
+        let lastVisit = route.length - 1; //go to last visit place
+        switch (route[lastVisit]) {
+            case "building":
+                city("intro");
+                break;
+            case "leftRoad":
                 roads();
-                building++;
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break; 
-        case "left": //want to go to the left
-            if (left == 0){
-                leftRoadIntro();
-                left++;
-            } else if (left == 1){
-                console.log("number 2")
-                left++;
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break; 
-        case "right": //wants to go to the right
-            if (right == 0){
-                rightRoadIntro();
-                right++
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break; 
-        case "catch pokemon": //wants to go to the right
-            if (pokemon == 0){
-                catchPokemon("Venonat");
-                pokemon++
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break;
-        case "take berries": //wants to go to the right
-            
-            if (takeBerry == 0){
-                takeBerry++
-                console.log("take berries 2")
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break;
-        case "take" + berryNumber + "berries": //wants to go to the right
-            takeBerry++
-            console.log("take berries number")
-            if (takeBerry == 1){
-                console.log("take" + berryNumber + "berries")
-            } else{
-                description(instructionData.dontUnderstand);
-            }
-            break;
-        case "storage": //wants to see pokemons
+                break;
+            case "rightRoad":
+                roads();
+                break;
+            default:
+                break;
+        }
+        route.splice(-1); // remove last index of array
+        option--;
+    } else {
+        if(userAnswear == "help"){ //help
+            description(instructionData.help);
+        } else if(userAnswear == "storage"){ //storage
             for(let i = 0; i <= storage.length-1; i++){
-                let paragraph = document.createElement("p");
-                paragraph.innerHTML += storage[0].name //take the array and push it on the site
-                placeText.append(paragraph);
+                description(storage[i]);
             };
-            break; 
-        default:
+        } else if(userAnswear == "yes" && option == 0){ //instruction yes
+            description(instructionData.instruction); 
+            city("intro"); //first city
+            option++; //1
+        } else if(userAnswear == "no" && option == 0){ //instruction no
+            city("intro"); //first city
+            option++; //1
+        } else if(userAnswear == "building" && option == 1){
+            crossRoads("firstRoad"); //go to crossroads
+            option++; //2
+        } else if(userAnswear == "right"){ //right
+            if (option == 2){
+                rightRoad("firstRoad"); //--> catch pokemon --> intro
+                option++; //3
+                seePokemon("intro"); //venonat
+            } else if (option == 4){
+                rightRoad("secondRoad"); //--> new city (city2)
+                option++; //5
+            } else if (option == x){
+                rightRoad("thirdRoad"); //--> battle leader (city2)
+                option++; //x
+            }else{
+                description(instructionData.dontUnderstand);
+            }; 
+        } else if(userAnswear == "left"){ //right
+            if (option == 4){
+                leftRoad("firstRoad");  //--> new city (city 1)
+                option++; // 4
+            } else if (option == 5){
+                leftRoad("secondRoad");  //--> battle leader (city 1)
+                option++; //5
+            } else if (option == 6){
+                leftRoad("thirdRoad");  //--> catch pokemon (dragonnite)
+                option++; //7
+            }else{
+                description(instructionData.dontUnderstand);
+            }; 
+        } else if(userAnswear == "catch"){//catch pokemon
+            if(option == 5){
+                getPokemon("intro");
+            }
+        } else{
             description(instructionData.dontUnderstand);
-            break;
+        };
     };
 };
 
 /*--------------------------------
-
         Generel functions
-
 --------------------------------*/
 //get the cursor to blink
 setInterval(function() {
     cursor.classList.toggle("blink");
 }, 600);
-
+//make a paragraph
 const description = (text) => {
     let paragraph = document.createElement("p");
     paragraph.innerHTML = text;
     placeText.appendChild(paragraph)
-}
-
-
-/* 
-    leader
-*/
-//talk to a leader
-function talkToPerson(gymLeader, type){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `The person introduce her self as ${gymLeader}. She has a ${type} type pokemon.
-    It is ${json.battle.pokemon}. What will you do?`;
-    placeText.appendChild(paragraph);
-};
-//battle a leader
-function battle(pokemon, weakness){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `You choose to battle ${pokemon}. The pokemon is weak to ${weakness}. 
-    Which pokemon will you choose to battle with?`;
-    placeText.appendChild(paragraph);
-};
-/* 
-    pokemons 
-*/ 
-//see a pokemon
-function seePokemon(){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `It is a pokemon!`;
-    placeText.appendChild(paragraph);
-};
-    //catch a pokemon
-    function catchPokemon(pokemon){
-        let paragraph = document.createElement("p"); //make a paragraph
-        paragraph.innerHTML = `You got ${pokemon}.`;
-        placeText.appendChild(paragraph);
-    };
-/* 
-    berries
-*/ 
-//see food
-function seeFood(){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `You are in a forrest. There is a lot if berries, that your pokemon love`;
-    placeText.appendChild(paragraph);
-};
-//take food
-function takeFood(berryNumber){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `You took ${berryNumber} berries`;
-    placeText.appendChild(paragraph);
-    
-    
 };
 
 /*--------------------------------
-
         DATA
-
 --------------------------------*/
+/*      instructions     */
 const instructionData = {
     instruction: 
         `Somewhere nearby is the Pokemon Leauge where others have fought and won legendary pokemons. 
-        Magic is said to dominate the way there. I will be your eyes and hands. Direct me with commands of 1 or 2 words. 
-        I should warn you that I look at only the first 5 letters of each word (should you get stuck type "help" for some generel hints)`,
+        It is a challenge to win the legendary poekmons. 
+        But I will be your eyes and hands. Direct me with commands of 1 or 2 words. 
+        If you should get stuck type "help" for some generel hints`,
     help: 
-        `I know of places, actions and things. Most of my vocabulary describes places and is used to you there. To move, try words like forest, building, enter, right, left, back. 
-        I know about a few special creatures, like pokemons. you can catch them. Usally you will need to give both the object and action words, but sometimes I can infer the object from the verb alone.
-        Some obejcts have also imply verbs; in particular "storage" implies "see storage" which causes me to give you a list of the pokemons you have catched`,
+        `I know of places, actions and things. Most of my vocabulary describes places and is used to you there. 
+        To move, try words like building, enter, right, left or back. 
+        I know about a few special creatures, like pokemons. You can catch them. 
+        Usally you will need to give both the object and action words, 
+        but sometimes I can infer the object from the verb alone.
+        Some obejcts have also imply verbs; in particular "storage" implies "see storage" 
+        which causes me to give you a list of the pokemons you have catched`,
     dontUnderstand: 
         `Sorry I don't understand. If you are stuck type "help" for some generel hints`
 };
 
-const introData = {
-    name: "Pallet Town",
-    battle : {},
-    pokemon: {
-        name: "Venonat",
-        type:"Bug"
-    },
-    info: "Starting and home town. Calm and tranquil.",
-    task: "catch pokemon",
-    options: ["building", "right", "left"]
-};
-
-const city1Data = {
-    name: "Pewter City",
-    battle: {
-        gymLeader: "Brock",
-        type: "Rock",
-        pokemon: "Geodude",
-        weakness: "Fighting"
-    },
-    pokemon: {},
-    info: "Home to the Museum of Science.",
-    task: "battle pokemon",
-    options: []
-};
-
-/*--------------------------------
-
-        city functions
-
---------------------------------*/
-/*  First city  */
-function intro(){
-    //what do the user see?
-    let paragraph = document.createElement("p");
-    paragraph.innerHTML = `You are at ${introData.name} on a road. In front of you is there a small brick building. Around you is a forrest. `;
-    placeText.appendChild(paragraph);
-};
-    //when the user go to the building
-    function roads(){
-        let paragraph = document.createElement("p");
-        paragraph.innerHTML = `You stand in front of the building. there is a road to the left and to the right. The road to the right is dark and something is moving. 
-        The road to the left is lighted up by lampposts`;
-        placeText.appendChild(paragraph);
-    };
-    //on the left road is there a pokemon the user need to capture
-    function leftRoadIntro(){
-        let paragraph = document.createElement("p");
-        paragraph.innerHTML = `You walked to the left. It is a long and dark road. You walk for 20 mins when you hear somehting in the bushes.
-        You stop and look over there. You can hear it moving. It is everywhere. It stops. You go back to the building.
-        Suddenly something is in front of you.`;
-        placeText.appendChild(paragraph);
-        seePokemon();
-    };
-    //The road to the next city
-    function rightRoadIntro(){
-        let paragraph = document.createElement("p");
-        paragraph.innerHTML = `You walked to the right. The road is nice you walk for 30 mins and see a new road`;
-        placeText.appendChild(paragraph);
-        city1();
-    };
-
-/*  
-    Second city  
-*/
-function city1(){
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `There is a sign with the name ${city1Data.name}. The road is splitting up. You can go to the left or right`;
-    placeText.appendChild(paragraph);
-    
-    //the road back to the last city
-    function backRoad(){
-        intro();
-    };
-    //meet the trainer and battle them
-    function leftRoad(){
-        let paragraph = document.createElement("p"); //make a paragraph
-        paragraph.innerHTML = `You go the the right and around a corner, where you see a person.`;
-        placeText.appendChild(paragraph);
-    };
-    //to go around the trainer
-    function rightRoad(){
-        let paragraph = document.createElement("p"); //make a paragraph
-        paragraph.innerHTML = ``;
-        placeText.appendChild(paragraph);
-    };
-};
-//city 2 
-function city2(){
-    let json = {
-        "name": "Pewter City",
-        "battle": {
-            "gymLeader": "Brock",
-            "type": "Rock",
-            "pokemon": "Geodude",
-            "weakness": "Fighting"
+/*      items    */
+const items = {
+   food: {
+        description: function(){
+            return `You are in a forest. 
+            There is a lot if berries, that your pokemons love`;
         },
-        "pokemon": "none",
-        "info": "Home to the Museum of Science.",
-        "task": "battle geodude"
-    }
-    
-    let paragraph = document.createElement("p"); //make a paragraph
-    paragraph.innerHTML = `There is a sign with the name `;
-    placeText.appendChild(paragraph);
+        caught: function(itemNumber){
+            return `You took ${itemNumber} berries`;
+        }
+   },
+   pokeballs: {
+        description: function(){
+            return `You can't catch any pokemons without pokeballs`;
+        },
+        caught: function(itemNumber){
+            return `You took ${itemNumber} berries`;
+        }
+   }
 };
 
-
-
+/*      pokemon    */
+const pokemon = {
+    description: function(){
+        return `There is a pokemon!`;
+    },
+    caught: function(pokemonName){
+        storage.push(pokemonName);
+        return `You got it! It is ${pokemonName}.`;
+    }
+};
+/*      leader    */
+const leader = {
+    description: function(gymLeader, pokemon){
+        return `The person introduce her self as ${gymLeader}. 
+        The pokemon is ${pokemon}. What will you do?`;
+    },
+    caught: function(gymLeader){
+        return `You won over ${gymLeader}.`;
+    }
+};
+/*      cities     */
+const cityData = {
+    intro: {
+        name: "Pallet Town",
+        battle : {},
+        pokemon: {
+            name: "Venonat",
+            type:"Bug",
+        },
+        info: "Starting and home town. Calm and tranquil.",
+        task: "catch pokemon",
+        description: function(){
+            return `You are at ${this.name} on a road. 
+            In front of you is there a small brick building. 
+            Around you is a forest.`;
+        },
+        options: ["building"]
+    },
+    city1: {
+        name: "Pewter City",
+        battle: {
+            gymLeader: "Brock",
+            type: "Rock",
+            pokemon: "Geodude",
+            weakness: "Fighting"
+        },
+        pokemon: {},
+        info: "Home to the Museum of Science.",
+        task: "battle pokemon",
+        description: function(){
+            return `There is a sign with the name ${this.name}. 
+            The road is splitting up. You can go to the left or right`;
+        },
+        options: ["left", "right", "battle leader", "back"]
+    },
+    city2: {
+        name: "Viridian City",
+        battle: {},
+        pokemon: {},
+        info: "City before Viridian Forest and city leading to Indigo Plateau.",
+        task: "take food",
+        description: function(){
+            return `There is a sign with the name ${this.name}. The road is splitting up. You can go to the left or right`;
+        },
+        options: ["get berries", "back"]
+    },
+    city3: {
+        name: "Cerulean City",
+        battle: {
+            gymLeader: "Misty",
+            type: "Water",
+            pokemon: "Tentacool",
+            weakness: "Dragon"
+        },
+        pokemon: {
+            name:"Dragonite",
+            type:"Dragon"
+        },
+        info: "Water city and home of the bike shop.",
+        task: "battle pokemon and catch pokemon",
+        description: function(){
+            return `There is a sign with the name ${this.name}. The road is splitting up. You can go to the left or right`;
+        },
+        options: ["battle leader", "catch pokemon", "left", "right", "back"]
+    },
+    city4: {
+        name: "Viridian City",
+        battle: {},
+        pokemon: {},
+        info: "Serves as a port for the S.S. Anne.",
+        task: "crossroad",
+        description: function(){
+            return `There is a sign with the name ${this.name}. The road is splitting up. You can go to the left or right`;
+        },
+        options: ["left", "right", "back"]
+    },
+    city5: {
+        name: "Lavender Town",
+        battle: {},
+        pokemon: {},
+        info: "Known for ghost sightings, home of the Pokemon Tower and a gravesite for Pokemon.",
+        task: "take pokeballs",
+        description: function(){
+            return `There is a sign with the name ${this.name}. The road is splitting up. You can go to the left or right`;
+        },
+        options: ["get pokeballs", "back"]
+    },
+    city5: {
+        name: "Celadon City",
+        battle: {
+            gymLeader: "Erika",
+            type: "Grass",
+            pokemon: "Bellsprout",
+            weakness: "Fire"
+        },
+        pokemon: {
+            name:"Vulpix",
+            type:"Fire"
+        },
+        info: "Most populated city in Kanto. Home to a department store and casino.",
+        task: "battle leader, catch pokemon",
+        description: function(){
+            return `There is a sign with the name ${this.name}. The road is splitting up. You can go to the left or right`;
+        },
+        options: ["battle leader", "catch pokemon", "back", "left", "right"]
+    },
+}
+/*      crossroads     */
+const roadsData = {
+    name: "crossroad",
+    firstRoad: {
+        description: function(){
+            return `You are at a ${roadsData.name}, where you stand in front of a building. 
+            The road is splitting up to the left and to the right. 
+            The road to the right is dark and you can't see anything. 
+            The road to the left is lighted up by lampposts`;
+        },
+    },
+    secondRoad: {
+        description: function(){
+            return `You are at a ${roadsData.name}. 
+            The road is splitting up to the left and to the right.`;
+        },
+    },
+    options: ["left", "right"]
+};
+/*      roads to the left     */
+const leftRoadData = {
+    name: "Left Road",
+    firstRoad: {
+        description: function(){ //crossroad
+            return `You walk to the left. 
+            The road is nice you walk for a while and 
+            see a new road`;
+        },
+        options: []
+    },
+    secondRoad: {
+        description: function(){ //battle time
+            return `You walked to the left. The road is winding.
+            But you can see something in the horizons. It is a person.`;
+        },
+        options: ["battle"]
+    },
+    thirdRoad: {
+        description: function(){ //catch pokemon
+            return `You walked to the left. The road is a dead end.
+            But you can see something moving.`;
+        },
+        options: ["catch"]
+    }
+};
+/*      roads to the right     */
+const rightRoadData = {
+    name: "Right Road",
+    firstRoad: {
+        description: function(){ //catch pokemon
+            return `You walked to the right. It is a long and dark road. 
+            You hear something in the bushes. You stop and look over there. 
+            You can hear it moving. It is everywhere. It stops. 
+            You go back to the building. Suddenly something is in front of you.`;
+        },
+        options: ["catch"]
+    },
+    secondRoad: {
+        description: function(){ //crossroad
+            return `You walk to the right. 
+            It is a nice road. The sun is shinning.
+            There is a lot of flowers and animals`;
+        },
+        options: []
+    },
+    thirdRoad: {
+        description: function(){ //battle
+            return `You walked to the right. The road is a boring and long.
+            But then you meet someone.`;
+        },
+        options: ["battle"]
+    }
+};
 
 /*--------------------------------
-
-        Eventlisteners
-
+        functions, so everything works
 --------------------------------*/
+/*  all cities  */
 
+function city(city){ //show city
+    description(cityData[city].description());
+};
+
+/*  all roads   */
+function crossRoads(road){ //cross road
+    route.push("crossRoad");
+    description(roadsData[road].description());
+};
+
+function leftRoad(road){ //left road
+    route.push("leftRoad");
+    description(leftRoadData[road].description());
+};
+
+function rightRoad(road){  //right road
+    route.push("rightRoad");
+    description(rightRoadData[road].description());
+};
+//building
+function roads(){
+    route.push("building");
+    description(roadsData.description());
+};
+
+/*  pokemon   */
+function seePokemon(){  //see pokemon
+    description(pokemon.description());
+};
+
+function getPokemon(city){ //catch pokemon
+    description(pokemon.caught(cityData[city].pokemon.name));
+};
+
+/*  leader  */
+function seeLeader(city){  //see pokemon
+    description(leader.description(city[city].battle.gymleader, city[city].battle.pokemon));
+};
+
+function battleLeader(city){ //catch pokemon
+    description(leader.caught(cityData[city].battle.gymLEader));
+};
+
+/*  items  */
+function seeItem(item){  //see items
+    description(items[item].description());
+};
+
+function takeItems(item){ //take items
+    description(items[item].caught(itemNumber));
+};
+
+/*--------------------------------
+        Eventlisteners
+--------------------------------*/
 //what does the user push on?
 window.addEventListener("keyup", function(e){
     var charCode = e.keyCode; //code of numbers
-    console.log(e.key)
-    let req = '/\w/';
-   if ((charCode > 47 && charCode < 58)||(charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 32) {//if you press any letters
+    if ((charCode > 47 && charCode < 58)||(charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode == 32) {//if you press any letters
         userLetter.push(e.key); //push inside the array
         userText.innerHTML = userLetter.join('');//make it visieble on the site
     } else if(charCode == 8){ //if you press backspace
         userLetter.splice(userLetter.length-1, 1);  //delete the numbers og arrays - 2 from behind
         return userText.innerHTML = userLetter.join(''); //make it visble on the site
     } else if(charCode == 13){  //if you press enter
-        let paragraph = document.createElement("p");
-        paragraph.innerHTML += userLetter.join(''); //take the array and push it on the site
-        placeText.append(paragraph);
+        description(userLetter.join(''));
         whatToDo();
         userLetter = []; //delete the array
         userText.innerHTML = ""; //upload the letters from the user on the site
@@ -342,7 +442,3 @@ window.addEventListener("keyup", function(e){
         return false;
     };
 });
-
-
-
-
