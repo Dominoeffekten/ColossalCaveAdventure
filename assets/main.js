@@ -136,13 +136,13 @@ function whatToDo(){
                 option++;
             } else if(option == 6){
                 getPokemon("city3"); //Dragonite
-            }else if(option == 7){
+            }else if(option == 9){
                 getPokemon("city6"); //vulpix
-                city("city6");
+                city("city7");
             } else{
                 description(instructionData.dontUnderstand);
             };
-        } else if(userAnswear == "battle leader"){//catch pokemon
+        } else if(userAnswear == "battle leader"){//battle leader
             if(option == 4 && storage[1] == "Venonat"){
                 battleLeader("city1"); //city 1
                 city("city2"); //new city
@@ -157,29 +157,37 @@ function whatToDo(){
             }else if(option == 9 && storage[4] == "Jynx"){
                 console.log("Jynx");
                 city("city8");
-            }else if (option == 4 && storage.length < 2){
+            } else{
                 description("Your pokemon is not strong enough. You lost");
                 crossRoads("road1");
                 option = 1;
-            } else{
-                description(instructionData.dontUnderstand);
             }
-        } else if(userAnswear.split(" ")[0] == "get" /*&& option == 4*/){//get berries
-            //city 2 --> new city3
-            let req = /[0-9]/; //checks for numbers
-            
+        } else if(userAnswear.split(" ")[0] == "get" && userAnswear.split(" ")[2] == "berries" && option == 4 ){//get berries
+            let req = /[0-9]/; 
             if(req.test(userAnswear)){
                 let berries = userAnswear.split(" ")[1];
                 for (let i = 0; i < berries; i++) { 
                     description(`You took ${i +1} berries`);
                 };
                 city("city3");
+                option++;
+                crossRoads("road2");
+            }else{
+                while (true) { }
+            };
+        } else if(userAnswear.split(" ")[0] == "get" && userAnswear.split(" ")[2] == "pokeballs" &&option == 7 ){//get pokeballs
+            let req = /[0-9]/; 
+            if(req.test(userAnswear)){
+                let pokeball = userAnswear.split(" ")[1];
+                for (let i = 0; i < pokeball; i++) { 
+                    description(`You took ${i +1} pokeball`);
+                };
+                city("city4");
             }else{
                 while (true) {
-                    description(`You took one berries`);
+                    description(`You took one pokeball`);
                 }
             }
-            
         }else{
             description(instructionData.dontUnderstand);
         };
@@ -320,10 +328,9 @@ const cityData = {
             name:"Dragonite",
             type:"Dragon"
         },
-        info: "Water city and home of the bike shop.",
+        info: "It is the water city and home of the bike shop.",
         description: function(){
-            return `The city name is ${this.name}.
-            It is the water city and home of the bike shop.`;
+            return `The city name is ${this.name}.${this.info}`;
         },
     },
     city4: {
@@ -341,7 +348,6 @@ const cityData = {
         battle: {},
         pokemon: {},
         info: "Known for ghost sightings, home of the Pokemon Tower and a gravesite for Pokemon.",
-        task: "take pokeballs",
         description: function(){
             return `There is a sign with the name ${this.name}. 
             The road is splitting up. You can go to the left or right`;
@@ -359,11 +365,9 @@ const cityData = {
             name:"Vulpix",
             type:"Fire"
         },
-        info: "Most populated city in Kanto. Home to a department store and casino.",
+        info: "It is the most populated city in Kanto. It is home to a department store and casino.",
         description: function(){
-            return `Most populated city in Kanto; ${this.name}. 
-            Home to a department store and casino. 
-            You can go to the left or right`;
+            return `Most populated city in Kanto; ${this.name}. ${this.info}`;
         },
     },
     city7:{
@@ -375,8 +379,11 @@ const cityData = {
             weakness: "Psychic"
         },
         pokemon: {},
-        info: "Second biggest city in terms of population. Along with Cerulean, the only city that has four routes into it.",
-        task: ["battle leader", "left", "right", "back"]
+        info: "is the second biggest city in terms of population. Along with Cerulean, the only city that has four routes into it.",
+        description: function(){
+            return ` ${this.name} ${this.info}. 
+            You can go to the left or right`;
+        }
     },
     city8:{
         name: "Fuchsia City",
@@ -385,13 +392,20 @@ const cityData = {
             name: "Jynx",
             type:"Psychic"
         },
-        info: "Home to the Safari Zone which has since been replaced with the Go Park.",
+        info: "is home to the Safari Zone which has since been replaced with the Go Park.",
+        description: function(){
+            return `${this.name} ${this.info}. 
+            You can go to the left or right`;
+        }
     },
     final:{
         name: "Indigo Plateau",
         battle: {},
         pokemon: {},
         info: "Capital of the Pokemon League.", 
+        description: function(){
+            return `You came to ${this.name}. ${this.info}.`;
+        }
     }
 }
 /*      crossroads     */
