@@ -10,17 +10,13 @@ const $ = function (foo) {
 
 //variables
 let userLetter = []; //A variable with the user letters
-let storage = ["Pikachue"]; //number of pokemons
+let storage = ["Pikachue"]; // pokemons in storgae
 
 //get elements
 let cursor = select(".fa-square-full"); //get square
 let userText = select(".userText"); //get the p for the user text
 let placeText = select(".placeTextHere"); //get the place for the user text
 
-let instructions = true; //do they want instructions?
-let building = true; //intro --> building
-let left = 0; //go to left
-let right = 0; //go to right
 let pokemonNumber = 0; //number og pokemons
 let berryNumber; //number og berries
 let takeBerry = 0;
@@ -33,25 +29,26 @@ let route = []; //which rout the user are one
 --------------------------------*/
 
 function whatToDo(){
-    console.log(option);
     let userAnswear = userLetter.join(''); //user answear
     if (userAnswear.toLowerCase() === "back") { //if the answear is back
         let lastVisit = route.length - 1; //go to last visit place
-        switch (route[lastVisit]) {
-            case "building":
-                city("intro");
+        let globalNameRoad = route[lastVisit].split(" ")[0]; //go inside switch
+        let nameOfRoute = route[lastVisit].split(" ")[1]; //firstRightRoad
+        switch (globalNameRoad) {
+            case "crossroad":
+                city(nameOfRoute);
                 break;
             case "leftRoad":
-                roads();
+                crossRoads(nameOfRoute);
                 break;
             case "rightRoad":
-                roads();
+                crossRoads(nameOfRoute);
                 break;
             default:
                 break;
-        }
+        };
         route.splice(-1); // remove last index of array
-        option--;
+        option--; //minus one option
     } else {
         if(userAnswear == "help"){ //help
             description(instructionData.help);
@@ -61,49 +58,134 @@ function whatToDo(){
             };
         } else if(userAnswear == "yes" && option == 0){ //instruction yes
             description(instructionData.instruction); 
-            city("intro"); //first city
+            city("introCity"); //first city
             option++; //1
         } else if(userAnswear == "no" && option == 0){ //instruction no
-            city("intro"); //first city
+            city("introCity"); //first city
             option++; //1
         } else if(userAnswear == "building" && option == 1){
-            crossRoads("firstRoad"); //go to crossroads
+            crossRoads("road1"); //go to crossroads
             option++; //2
         } else if(userAnswear == "right"){ //right
             if (option == 2){
-                rightRoad("firstRoad"); //--> catch pokemon --> intro
+                rightRoad("road1"); //--> catch pokemon (intro))
                 option++; //3
                 seePokemon("intro"); //venonat
-            } else if (option == 4){
-                rightRoad("secondRoad"); //--> new city (city2)
-                option++; //5
-            } else if (option == x){
-                rightRoad("thirdRoad"); //--> battle leader (city2)
-                option++; //x
+            } else if (option == 3){
+                rightRoad("road2"); //--> new city (city2)
+                city("city2");
+                seeItem("food");
+                option++; //4
+            } else if (option == 5){
+                rightRoad("road3"); //--> battle leader (city3)
+                seeLeader("city3"); //city4
+                option++; //6
+            } else if (option == 6){
+                rightRoad("road4");
+                seePokemon("city6"); //vulpix (city6)
+                option++; //7
+            } else if (option == 7){
+                rightRoad("road5"); //--> new city (city6)
+                city("city7"); //city7
+                option++; //8
+            } else if (option == 8){
+                rightRoad("road6"); //--> battle leader (city7)
+                seeLeader("city7"); //battle leader
+                option++; //9
             }else{
                 description(instructionData.dontUnderstand);
             }; 
         } else if(userAnswear == "left"){ //right
-            if (option == 4){
-                leftRoad("firstRoad");  //--> new city (city 1)
-                option++; // 4
+            if (option == 2){
+                leftRoad("road1");  //--> new city (city 1)
+                city("city1");
+                option++; // 3
+            } else if (option == 3){
+                leftRoad("road2");  //--> battle leader (city 1)
+                seeLeader("city1");
+                option++; //4
             } else if (option == 5){
-                leftRoad("secondRoad");  //--> battle leader (city 1)
-                option++; //5
+                leftRoad("road3");  //--> catch pokemon (dragonnite)
+                seePokemon("city3")//Dragonite
+                option++; //6
             } else if (option == 6){
-                leftRoad("thirdRoad");  //--> catch pokemon (dragonnite)
+                leftRoad("road4");  //--> catch pokeballs (city5)
+                seeItem("pokeballs");
                 option++; //7
-            }else{
+            } else if (option == 7){
+                leftRoad("road5");  //--> catch pokemon (city6 vulpix)
+                seeLeader("city6")//battle
+                option++; //8
+            } else if (option == 8){
+                leftRoad("road6");  //--> new city (city8)
+                seePokemon("city8");//jynx
+                option++; //9
+            } else if (option == 9){
+                if(storage.length = 5){
+                    leftRoad("final");  //--> new city (final)
+                    option++; //8
+                }else{
+                   description(`You have forgotten a pokemon. Find it and come back`);
+                }
+            } else{
                 description(instructionData.dontUnderstand);
             }; 
-        } else if(userAnswear == "catch"){//catch pokemon
-            if(option == 5){
-                getPokemon("intro");
+        } else if(userAnswear == "catch pokemon"){//catch pokemon
+            if(option == 3){
+                getPokemon("introCity"); //venonat
+                option++;
+            } else if(option == 6){
+                getPokemon("city3"); //Dragonite
+            }else if(option == 7){
+                getPokemon("city6"); //vulpix
+                city("city6");
+            } else{
+                description(instructionData.dontUnderstand);
+            };
+        } else if(userAnswear == "battle leader"){//catch pokemon
+            if(option == 4 && storage[1] == "Venonat"){
+                battleLeader("city1"); //city 1
+                city("city2"); //new city
+                seeItem("food"); //food
+                option++; //5
+            }else if(option == 6 && storage[2] == "Dragonite"){//fix
+                console.log("dragonnite");
+                city("city4");
+            }else if(option == 8 && storage[3] == "Vulpix"){
+                console.log("vulpix");
+                leftRoad("road5");
+            }else if(option == 9 && storage[4] == "Jynx"){
+                console.log("Jynx");
+                city("city8");
+            }else if (option == 4 && storage.length < 2){
+                description("Your pokemon is not strong enough. You lost");
+                crossRoads("road1");
+                option = 1;
+            } else{
+                description(instructionData.dontUnderstand);
             }
-        } else{
+        } else if(userAnswear.split(" ")[0] == "get" /*&& option == 4*/){//get berries
+            //city 2 --> new city3
+            let req = /[0-9]/; //checks for numbers
+            
+            if(req.test(userAnswear)){
+                let berries = userAnswear.split(" ")[1];
+                for (let i = 0; i < berries; i++) { 
+                    description(`You took ${i +1} berries`);
+                };
+                city("city3");
+            }else{
+                while (true) {
+                    description(`You took one berries`);
+                }
+            }
+            
+        }else{
             description(instructionData.dontUnderstand);
         };
     };
+    console.log(option);
+    console.log(route);
 };
 
 /*--------------------------------
@@ -113,6 +195,7 @@ function whatToDo(){
 setInterval(function() {
     cursor.classList.toggle("blink");
 }, 600);
+
 //make a paragraph
 const description = (text) => {
     let paragraph = document.createElement("p");
@@ -146,8 +229,9 @@ const instructionData = {
 const items = {
    food: {
         description: function(){
-            return `You are in a forest. 
-            There is a lot if berries, that your pokemons love`;
+            return `The forest is full of bushes 
+            where there are lots of berries.
+            It is berries that your pokemons love`;
         },
         caught: function(itemNumber){
             return `You took ${itemNumber} berries`;
@@ -176,7 +260,7 @@ const pokemon = {
 /*      leader    */
 const leader = {
     description: function(gymLeader, pokemon){
-        return `The person introduce her self as ${gymLeader}. 
+        return `The person introduce her self as battle leader ${gymLeader}. 
         The pokemon is ${pokemon}. What will you do?`;
     },
     caught: function(gymLeader){
@@ -185,7 +269,7 @@ const leader = {
 };
 /*      cities     */
 const cityData = {
-    intro: {
+    introCity: {
         name: "Pallet Town",
         battle : {},
         pokemon: {
@@ -193,13 +277,11 @@ const cityData = {
             type:"Bug",
         },
         info: "Starting and home town. Calm and tranquil.",
-        task: "catch pokemon",
         description: function(){
             return `You are at ${this.name} on a road. 
             In front of you is there a small brick building. 
             Around you is a forest.`;
         },
-        options: ["building"]
     },
     city1: {
         name: "Pewter City",
@@ -211,23 +293,20 @@ const cityData = {
         },
         pokemon: {},
         info: "Home to the Museum of Science.",
-        task: "battle pokemon",
         description: function(){
             return `There is a sign with the name ${this.name}. 
             The road is splitting up. You can go to the left or right`;
         },
-        options: ["left", "right", "battle leader", "back"]
     },
     city2: {
-        name: "Viridian City",
+        name: "Viridian forest",
         battle: {},
         pokemon: {},
         info: "City before Viridian Forest and city leading to Indigo Plateau.",
-        task: "take food",
         description: function(){
-            return `There is a sign with the name ${this.name}. The road is splitting up. You can go to the left or right`;
+            return `There is a sign with the name ${this.name}. 
+            It is the forest before Indigo Plateau.`;
         },
-        options: ["get berries", "back"]
     },
     city3: {
         name: "Cerulean City",
@@ -242,22 +321,20 @@ const cityData = {
             type:"Dragon"
         },
         info: "Water city and home of the bike shop.",
-        task: "battle pokemon and catch pokemon",
         description: function(){
-            return `There is a sign with the name ${this.name}. The road is splitting up. You can go to the left or right`;
+            return `The city name is ${this.name}.
+            It is the water city and home of the bike shop.`;
         },
-        options: ["battle leader", "catch pokemon", "left", "right", "back"]
     },
     city4: {
         name: "Viridian City",
         battle: {},
         pokemon: {},
         info: "Serves as a port for the S.S. Anne.",
-        task: "crossroad",
         description: function(){
-            return `There is a sign with the name ${this.name}. The road is splitting up. You can go to the left or right`;
+            return `You have come to a crossroad at ${this.name}. 
+            The road is splitting up. You can go to the left or right`;
         },
-        options: ["left", "right", "back"]
     },
     city5: {
         name: "Lavender Town",
@@ -266,11 +343,11 @@ const cityData = {
         info: "Known for ghost sightings, home of the Pokemon Tower and a gravesite for Pokemon.",
         task: "take pokeballs",
         description: function(){
-            return `There is a sign with the name ${this.name}. The road is splitting up. You can go to the left or right`;
+            return `There is a sign with the name ${this.name}. 
+            The road is splitting up. You can go to the left or right`;
         },
-        options: ["get pokeballs", "back"]
     },
-    city5: {
+    city6: {
         name: "Celadon City",
         battle: {
             gymLeader: "Erika",
@@ -283,17 +360,44 @@ const cityData = {
             type:"Fire"
         },
         info: "Most populated city in Kanto. Home to a department store and casino.",
-        task: "battle leader, catch pokemon",
         description: function(){
-            return `There is a sign with the name ${this.name}. The road is splitting up. You can go to the left or right`;
+            return `Most populated city in Kanto; ${this.name}. 
+            Home to a department store and casino. 
+            You can go to the left or right`;
         },
-        options: ["battle leader", "catch pokemon", "back", "left", "right"]
     },
+    city7:{
+        name: "Saffron City",
+        battle:{
+            gymLeader: "Sabrina",
+            type: "Psychic",
+            pokemon: "Abra",
+            weakness: "Psychic"
+        },
+        pokemon: {},
+        info: "Second biggest city in terms of population. Along with Cerulean, the only city that has four routes into it.",
+        task: ["battle leader", "left", "right", "back"]
+    },
+    city8:{
+        name: "Fuchsia City",
+        battle: {},
+        pokemon:{
+            name: "Jynx",
+            type:"Psychic"
+        },
+        info: "Home to the Safari Zone which has since been replaced with the Go Park.",
+    },
+    final:{
+        name: "Indigo Plateau",
+        battle: {},
+        pokemon: {},
+        info: "Capital of the Pokemon League.", 
+    }
 }
 /*      crossroads     */
 const roadsData = {
     name: "crossroad",
-    firstRoad: {
+    road1: {
         description: function(){
             return `You are at a ${roadsData.name}, where you stand in front of a building. 
             The road is splitting up to the left and to the right. 
@@ -301,66 +405,102 @@ const roadsData = {
             The road to the left is lighted up by lampposts`;
         },
     },
-    secondRoad: {
+    road2: {
         description: function(){
             return `You are at a ${roadsData.name}. 
             The road is splitting up to the left and to the right.`;
         },
     },
-    options: ["left", "right"]
 };
 /*      roads to the left     */
 const leftRoadData = {
     name: "Left Road",
-    firstRoad: {
+    road1: {
         description: function(){ //crossroad
             return `You walk to the left. 
             The road is nice you walk for a while and 
             see a new road`;
         },
-        options: []
     },
-    secondRoad: {
+    road2: {
         description: function(){ //battle time
             return `You walked to the left. The road is winding.
             But you can see something in the horizons. It is a person.`;
         },
-        options: ["battle"]
     },
-    thirdRoad: {
+    road3: {
         description: function(){ //catch pokemon
             return `You walked to the left. The road is a dead end.
             But you can see something moving.`;
+        }
+    },
+    road4: {
+        description: function(){ //catch pokemon
+            return `You walked to the left. You see a flower field
+            where you something is hidding.
+            It is pokeballs`;
+        }
+    },
+    road5: {
+        description: function(){ //catch pokemon
+            return `You are meet by a dead end.
+            But in the corner there is something.`;
+        }
+    },
+    road6: {
+        description: function(){ //catch pokemon
+            return `the road is steep, and it is hard to walk.`;
         },
-        options: ["catch"]
+    },
+    final: {
+        description: function(){ //catch pokemon
+            return `You are walking to the end of the moutain.
+            You can see over all the cities, where you have won over
+             the leaders and catched all the pokemons.
+            But you are ready for new adventures.`;
+        },
+        options: []
     }
 };
 /*      roads to the right     */
 const rightRoadData = {
     name: "Right Road",
-    firstRoad: {
+    road1: {
         description: function(){ //catch pokemon
             return `You walked to the right. It is a long and dark road. 
             You hear something in the bushes. You stop and look over there. 
             You can hear it moving. It is everywhere. It stops. 
             You go back to the building. Suddenly something is in front of you.`;
         },
-        options: ["catch"]
     },
-    secondRoad: {
+    road2: {
         description: function(){ //crossroad
             return `You walk to the right. 
             It is a nice road. The sun is shinning.
             There is a lot of flowers and animals`;
         },
-        options: []
     },
-    thirdRoad: {
+    road3: {
         description: function(){ //battle
             return `You walked to the right. The road is a boring and long.
             But then you meet someone.`;
         },
-        options: ["battle"]
+    },
+    road4: {
+        description: function(){ //battle
+            return `The right road is nice, but leads to another city.`;
+        },
+    },
+    road5: {
+        description: function(){ //battle
+            return `There is a sign, which leads you
+             to another city.`;
+        },
+    },
+    road5: {
+        description: function(){ //battle
+            return `Another road, another city`;
+        },
     }
 };
 
@@ -370,28 +510,24 @@ const rightRoadData = {
 /*  all cities  */
 
 function city(city){ //show city
+    route.push(city); //building
     description(cityData[city].description());
 };
 
 /*  all roads   */
 function crossRoads(road){ //cross road
-    route.push("crossRoad");
+    route.push("crossroad " + road);
     description(roadsData[road].description());
 };
 
 function leftRoad(road){ //left road
-    route.push("leftRoad");
+    route.push("leftRoad "+road);
     description(leftRoadData[road].description());
 };
 
 function rightRoad(road){  //right road
-    route.push("rightRoad");
+    route.push("rightRoad "+road);
     description(rightRoadData[road].description());
-};
-//building
-function roads(){
-    route.push("building");
-    description(roadsData.description());
 };
 
 /*  pokemon   */
@@ -405,11 +541,12 @@ function getPokemon(city){ //catch pokemon
 
 /*  leader  */
 function seeLeader(city){  //see pokemon
-    description(leader.description(city[city].battle.gymleader, city[city].battle.pokemon));
+    console.log()
+    description(leader.description(cityData[city].battle.gymLeader, cityData[city].battle.pokemon));
 };
 
 function battleLeader(city){ //catch pokemon
-    description(leader.caught(cityData[city].battle.gymLEader));
+    description(leader.caught(cityData[city].battle.gymLeader));
 };
 
 /*  items  */
@@ -419,6 +556,28 @@ function seeItem(item){  //see items
 
 function takeItems(item){ //take items
     description(items[item].caught(itemNumber));
+};
+
+//go back
+function goBack(){
+    let lastVisit = route.length - 1; //go to last visit place
+        let globalNameRoad = route[lastVisit].split(" ")[0]; //go inside switch
+        let nameOfRoute = route[lastVisit].split(" ")[1]; //firstRightRoad
+        switch (globalNameRoad) {
+            case "crossroad":
+                city(nameOfRoute);
+                break;
+            case "leftRoad":
+                crossRoads(nameOfRoute);
+                break;
+            case "rightRoad":
+                crossRoads(nameOfRoute);
+                break;
+            default:
+                break;
+        };
+        route.splice(-1); // remove last index of array
+        option--; //minus one option
 };
 
 /*--------------------------------
