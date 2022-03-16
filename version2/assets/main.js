@@ -50,7 +50,7 @@ function whatToDo(){
     } else {
         if(userAnswear == "help"){ //help
             description(instructionData.help);
-        } else if(userAnswear == "storage"){ 
+        } else if(userAnswear == "storage"){ //storage
             for(let i = 0; i <= pokemonStorage.length-1; i++){
                 description(pokemonStorage[i]);
             };
@@ -59,87 +59,87 @@ function whatToDo(){
             };
         } else if(userAnswear == "yes" && option == 0){ //instruction yes
             description(instructionData.instruction); 
-            city("introCity");
-            option++; 
+            city("introCity"); //first city
+            option++; //1
         } else if(userAnswear == "no" && option == 0){ //instruction no
-            city("introCity"); 
-            option++;
+            city("introCity"); //first city
+            option++; //1
         } else if(userAnswear == "building" && option == 1){
-            crossRoads("road1"); 
-            option++;
+            crossRoads("road1"); //go to crossroads
+            option++; //2
         } else if(userAnswear == "right"){ //right
             if (option == 2){
-                rightRoad("road1");
-                option++;
-                seePokemon("intro");
+                rightRoad("road1"); //--> catch pokemon (intro))
+                option++; //3
+                seePokemon("intro"); //venonat
             } else if (option == 3){
-                rightRoad("road2"); 
+                rightRoad("road2"); //--> new city (city2)
                 city("city2");
                 seeItem("food");
-                option++; 
+                option++; //4
             } else if (option == 5){
-                rightRoad("road3"); 
-                seeLeader("city3");
-                option++;
+                rightRoad("road3"); //--> battle leader (city3)
+                seeLeader("city3"); //city4
+                option++; //6
             } else if (option == 6){
                 rightRoad("road4");
-                seePokemon("city6");
-                option++; 
+                seePokemon("city6"); //vulpix (city6)
+                option++; //7
             } else if (option == 7){
-                rightRoad("road5");
-                city("city7");
-                option++; 
+                rightRoad("road5"); //--> new city (city6)
+                city("city7"); //city7
+                option++; //8
             } else if (option == 8){
-                city("city8");
-                seePokemon("city7");
-                option++;
+                city("city8");//--> battle leader (city7)
+                seePokemon("city7"); //pokemon
+                option++; //9
             } else{
                 description(instructionData.dontUnderstand);
             }; 
-        } else if(userAnswear == "left"){ //left
+        } else if(userAnswear == "left"){ //right
             if (option == 2){
-                leftRoad("road1");
+                leftRoad("road1");  //--> new city (city 1)
                 city("city1");
-                option++;
+                option++; // 3
             } else if (option == 3){
-                leftRoad("road2");
+                leftRoad("road2");  //--> battle leader (city 1)
                 seeLeader("city1");
-                option++;
+                option++; //4
             } else if (option == 5){
-                leftRoad("road3"); 
-                seePokemon("city3");
-                option++;
+                leftRoad("road3");  //--> catch pokemon (dragonnite)
+                seePokemon("city3")//Dragonite
+                option++; //6
             } else if (option == 6){
-                leftRoad("road4");
+                leftRoad("road4");  //--> catch pokeballs (city5)
                 seeItem("pokeballs");
-                option++;
+                option++; //7
             } else if (option == 7){
-                leftRoad("road5"); 
-                seeLeader("city6");
-                option++;
+                leftRoad("road5");  //--> catch pokemon (city6 vulpix)
+                seeLeader("city6")//battle
+                option++; //8
             } else if (option == 8){
-                leftRoad("road6");
-                city("city8");
+                leftRoad("road6");  //--> new city (city8)
+                city("city8");//jynx
                 seeLeader("city8");
-                option++;
+                option++; //9
             } else{
                 description(instructionData.dontUnderstand);
             }; 
         } else if(userAnswear == "catch pokemon"){//catch pokemon
             if(option == 3){
-                getPokemon("introCity");
+                getPokemon("introCity"); //venonat
                 crossRoads("road1");
                 option--;
             } else if(option == 6){
-                getPokemon("city3"); 
+                getPokemon("city3"); //Dragonite
                 city("city3");
                 crossRoads("road2");
                 option--;
             }else if(option == 7){
-                getPokemon("city6");
+                getPokemon("city6"); //vulpix
                 city("city6");
             }else if(option == 9){
-                getPokemon("city7");
+                getPokemon("city7"); //Jynx
                 city("city8");
                 seeLeader("city8");
             } else{
@@ -147,12 +147,12 @@ function whatToDo(){
             };
         } else if(userAnswear == "battle leader"){//battle leader
             if(option == 4 && pokemonStorage[1] == "Venonat"){
-                battleLeader("city1");
-                city("city2");
-                seeItem("food");
+                battleLeader("city1"); //city 1
+                city("city2"); //new city
+                seeItem("food"); //food
                 wins++;
             }else if(option == 6 && pokemonStorage[2] == "Dragonite"){
-                battleLeader("city3");
+                battleLeader("city3"); //city 3
                 city("city4");
                 wins++;
             }else if(option == 8 && pokemonStorage[3] == "Vulpix"){
@@ -173,7 +173,7 @@ function whatToDo(){
             }
         } else if(userAnswear == "capital" && option > 9){
             if(pokemonStorage.length == 5 && wins == 4){
-                city("final");
+                city("final");  //(final)
                 option++;
             } else if(pokemonStorage.length < 5){
                 description(`You can't get to the capital. 
@@ -288,7 +288,6 @@ const pokemon = {
         return `You got it! It is ${pokemonName}.`;
     }
 };
-
 /*      leader    */
 const leader = {
     description: function(gymLeader, pokemon){
@@ -299,7 +298,6 @@ const leader = {
         return `You won over ${gymLeader}.`;
     }
 };
-
 /*      cities     */
 const cityData = {
     introCity: {
@@ -452,8 +450,7 @@ const cityData = {
             But you are ready for new adventures.`;
         }
     }
-};
-
+}
 /*      crossroads     */
 const roadsData = {
     name: "crossroad",
@@ -472,7 +469,6 @@ const roadsData = {
         },
     },
 };
-
 /*      roads to the left     */
 const leftRoadData = {
     name: "Left Road",
@@ -514,7 +510,6 @@ const leftRoadData = {
         },
     }
 };
-
 /*      roads to the right     */
 const rightRoadData = {
     name: "Right Road",
@@ -610,6 +605,28 @@ function seeItem(item){  //see items
 
 function takeItems(item){ //take items
     description(items[item].caught(itemNumber));
+};
+
+//go back
+function goBack(){
+    let lastVisit = route.length - 1; //go to last visit place
+        let globalNameRoad = route[lastVisit].split(" ")[0]; //go inside switch
+        let nameOfRoute = route[lastVisit].split(" ")[1]; //firstRightRoad
+        switch (globalNameRoad) {
+            case "crossroad":
+                city(nameOfRoute);
+                break;
+            case "leftRoad":
+                crossRoads(nameOfRoute);
+                break;
+            case "rightRoad":
+                crossRoads(nameOfRoute);
+                break;
+            default:
+                break;
+        };
+        route.splice(-1); // remove last index of array
+        option--; //minus one option
 };
 
 /*--------------------------------
